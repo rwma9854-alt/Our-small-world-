@@ -1,0 +1,149 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>عالمنا الصغير</title><meta name="theme-color" content="#2a1740">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Reem+Kufi:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff5f8;--card:#ffffffb8;--tx:#4a2748;--pk:#f4a6c0;--lv:#c9b6f2;--gd:#d4af6a;--rg:#b76e79}
+@media(prefers-color-scheme:dark){:root{--bg:#1d1030;--card:#ffffff14;--tx:#fdeaf2}}
+*{box-sizing:border-box}body{margin:0;font-family:Tajawal,sans-serif;color:var(--tx);min-height:100vh;
+background:radial-gradient(circle at 20% 10%,#f9c9dd66,transparent 50%),radial-gradient(circle at 80% 90%,#c9b6f266,transparent 50%),var(--bg);padding-bottom:84px}
+h1,h2{font-family:'Reem Kufi',serif;background:linear-gradient(90deg,var(--rg),var(--gd),var(--lv));-webkit-background-clip:text;color:transparent;margin:.3em 0}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.stars i{position:absolute;bottom:-30px;animation:up linear infinite;opacity:.6}
+@keyframes up{to{transform:translateY(-110vh) rotate(25deg)}}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.wrap{max-width:640px;margin:auto;padding:16px}
+.card{background:var(--card);backdrop-filter:blur(12px);border:1px solid #d4af6a55;border-radius:20px;padding:14px;margin:10px 0;box-shadow:0 8px 24px #b76e7922;animation:pop .35s}
+input,select,textarea,button{font:inherit;color:inherit;border-radius:14px;border:1px solid #d4af6a88;padding:10px;background:#ffffff66;width:100%;margin:4px 0}
+button{width:auto;cursor:pointer;background:linear-gradient(135deg,var(--pk),var(--lv));border:0;font-weight:700;color:#3b1a3a}
+button.ghost{background:transparent;border:1px solid var(--gd)}
+nav{position:fixed;bottom:0;inset-inline:0;display:flex;overflow-x:auto;gap:6px;padding:8px;background:var(--card);backdrop-filter:blur(14px);border-top:1px solid var(--gd)}
+nav button{flex:0 0 auto;font-size:13px;padding:8px 12px}nav button.on{outline:2px solid var(--gd)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tile{border-radius:16px;padding:10px 2px;text-align:center;background:linear-gradient(160deg,#f4a6c0,#c9b6f2);color:#3b1a3a;box-shadow:0 0 18px #f4a6c099}
+.tile b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.tile small{font-size:11px}
+.big{font-size:56px;text-align:center;font-weight:700;font-family:'Reem Kufi'}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.muted{opacity:.7;font-size:13px}
+#toast{position:fixed;top:12px;inset-inline:12px;z-index:9;text-align:center;background:#3b1a3a;color:#fff;border-radius:14px;padding:10px;display:none}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}
+dialog{border:0;border-radius:20px;background:var(--bg);color:var(--tx);width:min(92vw,520px)}
+#jar{font-size:110px;text-align:center;cursor:pointer;user-select:none}#heart{font-size:40px;text-align:center;animation:pop .6s}
+.dead{display:none}
+</style></head><body>
+<div class="stars" id="stars"></div><div id="toast"></div>
+<div id="auth" class="wrap"><h1 style="text-align:center;font-size:34px">أهلًا بيكم في عالمنا الصغير ✨</h1>
+<form id="login" class="card"><p class="muted">دخول خاص بينا إحنا الاتنين 💗</p>
+<input id="em" type="email" placeholder="الإيميل" autocomplete="username" required>
+<input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password" required>
+<input id="who" placeholder="اسمك (علشان نعرف مين كتب)" required>
+<button>ادخل 💫</button><p id="err" class="muted"></p></form></div>
+<div id="app" class="wrap dead"><div id="view"></div>
+<nav id="nav"></nav></div>
+<dialog id="dlg"><form id="f" method="dialog"></form></dialog>
+<script type="module">
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const CFG={url:"https://dqorjtqisquvixlmmenm.supabase.co",key:"sb_publishable_3eFH-ksbtAXJ8by30anZvQ_zd20fvoS"};
+const $=s=>document.querySelector(s),sb=createClient(CFG.url,CFG.key);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SECS={timeline:{n:'🕰️ خط الزمن',cats:[],date:1,link:1,ph:'مثال: أول مرة اتكلمنا'},
+letters:{n:'💌 رسائل',cats:['رسائل حب','رسائل الصباح','رسائل قبل النوم','رسائل وقت الزعل','رسائل وقت الاشتياق','رسائل التشجيع','رسائل للمناسبات','رسائل للمستقبل','لما تكون زعلان'],letter:1},
+jar:{n:'🫙 البرطمان',cats:['حب','تشجيع','ضحك','اشتياق'],jar:1},
+photos:{n:'📸 الصور',cats:['أجمل ذكرياتنا','صوري المفضلة ليك','صورك المفضلة ليا','صورنا سوا','صور الخطوبة','صور الفرح والمستقبل','ألبوم مفاجآت'],photo:1,date:1},
+music:{n:'🎵 الموسيقى',cats:['أغانينا','أغاني بتفكرني بيك','أغاني للمناسبات'],link:1},
+plans:{n:'💍 مستقبلنا',cats:['الخطوبة','الفرح'],check:1,date:1,budget:1},
+dreams:{n:'🌠 أحلامنا',cats:[],check:1}};
+const TABS=['home',...Object.keys(SECS),'settings'];
+let st={},items=[],tab='home',cat='',q='',me=localStorage.me||'',timer,urls={};
+const toast=(m,ok)=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._);t._=setTimeout(()=>t.style.display='none',3500)};
+const onerr=e=>toast(navigator.onLine?'حصلت مشكلة: '+(e.message||e):'مفيش إنترنت — التغيير ماتحفظش ⚠️');
+addEventListener('offline',()=>toast('انت أوفلاين — مش هيتحفظ حاجة لحد ما النت يرجع'));
+$('#stars').innerHTML=Array.from({length:14},(_,i)=>`<i style="left:${Math.random()*100}%;font-size:${12+Math.random()*18}px;animation-duration:${14+Math.random()*16}s;animation-delay:-${Math.random()*20}s">${['💗','✨','⭐','💜'][i%4]}</i>`).join('');
+$('#who').value=me;
+$('#login').onsubmit=async e=>{e.preventDefault();me=$('#who').value.trim();localStorage.me=me;
+ const {error}=await sb.auth.signInWithPassword({email:$('#em').value,password:$('#pw').value});
+ if(error)$('#err').textContent='الإيميل أو كلمة السر غلط';else boot()};
+async function boot(){const {data}=await sb.auth.getSession();if(!data.session)return;
+ if(!me){me=prompt('اسمك؟')||'أنا';localStorage.me=me}
+ $('#auth').classList.add('dead');$('#app').classList.remove('dead');
+ $('#nav').innerHTML=TABS.map(t=>`<button data-t="${t}">${t=='home'?'🏠 الرئيسية':t=='settings'?'⚙️ إعدادات':SECS[t].n}</button>`).join('');
+ $('#nav').onclick=e=>{const b=e.target.closest('button');if(b){tab=b.dataset.t;cat='';q='';render()}};
+ await load();sb.channel('x').on('postgres_changes',{event:'*',schema:'public'},()=>load()).subscribe()}
+async function load(){try{const [s,i]=await Promise.all([sb.from('settings').select().eq('id',1).single(),sb.from('items').select().order('created_at',{ascending:false})]);
+ if(s.error)throw s.error;if(i.error)throw i.error;st=s.data;items=i.data;render()}catch(e){onerr(e)}}
+const pad=n=>String(n).padStart(2,'0');
+function ym(a,b){let m=(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth(),t=new Date(a);t.setMonth(a.getMonth()+m);if(t>b){m--;t=new Date(a);t.setMonth(a.getMonth()+m)}return[m,Math.floor((b-t)/864e5)]}
+function tick(){const el=$('#cnt');if(!el||!st.start_at)return;const a=new Date(st.start_at),n=new Date(),d=n-a,[m,dd]=ym(a,n);
+ const nx=new Date(a);nx.setFullYear(n.getFullYear());if(nx<=n)nx.setFullYear(n.getFullYear()+1);const r=nx-n;
+ el.innerHTML=`<div class="big">${Math.floor(d/864e5)}</div><p style="text-align:center">يوم سوا 💗</p><div class="tiles">
+ ${[[m,'شهر'],[dd,'يوم'],[pad(Math.floor(d/36e5)%24),'ساعة'],[pad(Math.floor(d/6e4)%60),'دقيقة']].map(([v,l])=>`<div class="tile"><b>${v}</b><small>${l}</small></div>`).join('')}</div>
+ <p style="text-align:center">${pad(Math.floor(d/1e3)%60)} ثانية</p><p class="muted" style="text-align:center">بدأنا: ${a.toLocaleString('ar-EG',{dateStyle:'full',timeStyle:'short'})}</p>
+ <h2 style="text-align:center">الذكرى الجاية بعد ${Math.floor(r/864e5)} يوم و${Math.floor(r/36e5)%24} ساعة 🎉</h2>`}
+function render(){clearInterval(timer);document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab));
+ const v=$('#view');
+ if(tab=='home'){v.innerHTML=`<h1>${esc(st.welcome)}</h1>${st.start_at?'<div class="card" id="cnt"></div>':'<div class="card"><h2>أول مرة؟ ✨</h2><p>اختاروا تاريخ ووقت بداية علاقتكم من ⚙️ الإعدادات.</p></div>'}
+ ${st.event_at?`<div class="card"><h2>${esc(st.event_name||'يومنا المنتظر')}</h2><p>باقي ${Math.max(0,Math.ceil((new Date(st.event_at)-new Date())/864e5))} يوم</p></div>`:''}
+ <div class="card"><button id="star">⭐ اضغط على نجمة</button> <span id="sec"></span></div>`;
+  tick();timer=setInterval(tick,1000);$('#star').onclick=()=>{const l=items.filter(i=>i.kind=='letters'&&i.data.surprise&&i.created_by!=me);$('#sec').textContent=l.length?'💌 فيه رسالة مفاجأة مستنياك في الرسائل!':'لسه مفيش مفاجآت مخبية ✨'}}
+ else if(tab=='settings')settingsView();else listView()}
+function listView(){const S=SECS[tab],v=$('#view');let L=items.filter(i=>i.kind==tab&&(!cat||i.category==cat)&&(!q||(i.title+i.body).includes(q)));
+ if(S.date&&!S.photo)L.sort((a,b)=>new Date(a.date||a.created_at)-new Date(b.date||b.created_at));
+ v.innerHTML=`<h1>${S.n}</h1><div class="row"><input id="q" placeholder="🔍 بحث" value="${esc(q)}" style="flex:1">${S.cats.length?`<select id="cat" style="width:auto"><option value="">الكل</option>${S.cats.map(c=>`<option ${c==cat?'selected':''}>${c}</option>`).join('')}</select>`:''}<button id="add">＋ إضافة</button></div>
+ ${S.check?`<p class="muted">التقدم: ${L.filter(i=>i.done).length}/${L.length}</p><progress style="width:100%" max="${L.length||1}" value="${L.filter(i=>i.done).length}"></progress>`:''}
+ ${S.jar?`<div class="card"><div id="jar">🫙</div><div id="out" style="text-align:center"></div><p class="muted" style="text-align:center">${L.length} رسالة في البرطمان</p></div>`:''}
+ ${L.length?'':'<div class="card muted">لسه مفيش حاجة هنا… أضيفوا أول حاجة بإيديكم 💗</div>'}
+ <div class="${S.photo?'grid':''}">${L.map(card).join('')}</div>`;
+ $('#q').onchange=e=>{q=e.target.value;listView()};if($('#cat'))$('#cat').onchange=e=>{cat=e.target.value;listView()};
+ $('#add').onclick=()=>edit();
+ if(S.jar)$('#jar').onclick=()=>{if(!L.length)return toast('ضيفوا رسائل الأول 💌');const m=L[Math.random()*L.length|0];
+  $('#out').innerHTML=`<div id="heart">💖</div><p>${esc(m.body||m.title)}</p><button data-fav="${m.id}">${m.fav?'💔 شيل من المفضلة':'⭐ حفظ في المفضلة'}</button> <button class="ghost" id="more">رسالة تانية</button>`;$('#more').onclick=()=>$('#jar').click()};
+ v.onclick=async e=>{const b=e.target.closest('[data-id],[data-fav],[data-del],[data-open],[data-chk],[data-rx]');if(!b)return;const D=b.dataset;
+  try{if(D.fav){const i=items.find(x=>x.id==D.fav);await up(i.id,{fav:!i.fav})}
+  else if(D.del){if(confirm('متأكدين من الحذف؟')){const i=items.find(x=>x.id==D.del);if(i.data.path)await sb.storage.from('photos').remove([i.data.path]);const r=await sb.from('items').delete().eq('id',D.del);if(r.error)throw r.error;toast('اتحذف')}}
+  else if(D.id)edit(items.find(x=>x.id==D.id));
+  else if(D.chk){const i=items.find(x=>x.id==D.chk);await up(i.id,{done:!i.done})}
+  else if(D.rx){const i=items.find(x=>x.id==D.rx);await up(i.id,{data:{...i.data,rx:(i.data.rx||0)+1}});toast('💗')}
+  else if(D.open){const i=items.find(x=>x.id==D.open);await up(i.id,{data:{...i.data,opened:1}})}}catch(e){onerr(e)}};
+ L.filter(i=>i.data.path).forEach(async i=>{if(!urls[i.data.path]){const r=await sb.storage.from('photos').createSignedUrl(i.data.path,3600);if(r.data){urls[i.data.path]=r.data.signedUrl;const im=document.querySelector(`[data-ph="${i.id}"]`);if(im)im.src=r.data.signedUrl}}})}
+async function up(id,p){const r=await sb.from('items').update(p).eq('id',id);if(r.error)throw r.error;toast('اتحفظ ✅');load()}
+function card(i){const S=SECS[tab],d=i.data;
+ if(S.photo)return`<div><img data-ph="${i.id}" src="${urls[d.path]||''}" alt="${esc(i.title)}" data-id="${i.id}"></div>`;
+ const hidden=S.letter&&d.surprise&&i.created_by!=me&&!d.opened;
+ return`<div class="card"><div class="row"><b style="flex:1">${S.check?`<input type="checkbox" style="width:auto" ${i.done?'checked':''} data-chk="${i.id}"> `:''}${esc(i.title)}</b><span class="muted">${esc(i.category||'')}</span></div>
+ ${hidden?`<button data-open="${i.id}">🎁 مفاجأة لك — افتح</button>`:`<p style="white-space:pre-wrap">${esc(i.body)}</p>`}
+ ${i.date?`<div class="muted">📅 ${new Date(i.date).toLocaleDateString('ar-EG')}</div>`:''}
+ ${d.budget?`<div class="muted">💰 ${esc(d.budget)}</div>`:''}${d.draft?'<div class="muted">📝 مسودة</div>':''}
+ ${d.link&&/^https?:\/\//.test(d.link)?`<a href="${esc(d.link)}" target="_blank" rel="noopener">🔗 افتح</a>`:''}
+ <div class="muted">بقلم: ${esc(i.created_by)} • ${new Date(i.created_at).toLocaleDateString('ar-EG')}</div>
+ <div class="row"><button data-fav="${i.id}">${i.fav?'⭐':'☆'}</button><button data-rx="${i.id}">💗 ${d.rx||0}</button><button class="ghost" data-id="${i.id}">تعديل</button><button class="ghost" data-del="${i.id}">حذف</button></div></div>`}
+function edit(i){const S=SECS[tab],d=i?.data||{},dl=$('#dlg'),f=$('#f');
+ f.innerHTML=`<h2>${i?'تعديل':'إضافة'}</h2><input name="title" placeholder="${S.ph||'العنوان'}" value="${esc(i?.title)}" required>
+ ${S.photo?'<input type="file" name="file" accept="image/*">':`<textarea name="body" rows="5" placeholder="الكلام...">${esc(i?.body)}</textarea>`}
+ ${S.cats.length?`<select name="category">${S.cats.map(c=>`<option ${i?.category==c?'selected':''}>${c}</option>`).join('')}</select>`:''}
+ ${S.date?`<input type="datetime-local" name="date" value="${i?.date?new Date(new Date(i.date)-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16):''}">`:''}
+ ${S.link?`<input name="link" type="url" placeholder="رابط (اختياري)" value="${esc(d.link)}">`:''}${S.budget?`<input name="budget" placeholder="تكلفة تقريبية" value="${esc(d.budget)}">`:''}
+ ${S.letter?`<label><input type="checkbox" name="surprise" style="width:auto" ${d.surprise?'checked':''}> مفاجأة للطرف التاني</label><label><input type="checkbox" name="draft" style="width:auto" ${d.draft?'checked':''}> مسودة</label>`:''}
+ <div class="row"><button id="ok">حفظ</button><button type="button" class="ghost" id="no">إلغاء</button></div>`;
+ dl.showModal();$('#no').onclick=()=>dl.close();
+ f.onsubmit=async e=>{e.preventDefault();const fd=new FormData(f),btn=$('#ok');btn.disabled=true;
+  try{const data={...d};['link','budget'].forEach(k=>{if(fd.has(k))data[k]=fd.get(k)});if(S.letter){data.surprise=fd.has('surprise');data.draft=fd.has('draft')}
+   const file=fd.get('file');if(file&&file.size){data.path=await upload(file);if(i?.data.path)await sb.storage.from('photos').remove([i.data.path])}
+   else if(S.photo&&!i)throw new Error('اختاروا صورة');
+   const row={title:fd.get('title'),body:fd.get('body')||null,category:fd.get('category')||null,date:fd.get('date')?new Date(fd.get('date')).toISOString():null,data};
+   const r=i?await sb.from('items').update(row).eq('id',i.id):await sb.from('items').insert({...row,kind:tab,created_by:me});
+   if(r.error)throw r.error;dl.close();toast('اتحفظ ✅ وظهر عند التاني');load()}catch(e){onerr(e)}btn.disabled=false}}
+async function upload(file){const bmp=await createImageBitmap(file),s=Math.min(1,1600/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');
+ c.width=bmp.width*s;c.height=bmp.height*s;c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+ const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.82)),path=crypto.randomUUID()+'.jpg';
+ const r=await sb.storage.from('photos').upload(path,blob,{contentType:'image/jpeg'});if(r.error)throw r.error;return path}
+function settingsView(){const loc=x=>x?new Date(new Date(x)-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16):'';
+ $('#view').innerHTML=`<h1>⚙️ الإعدادات</h1><form class="card" id="sf"><label>بداية علاقتنا (تاريخ ووقت)</label><input type="datetime-local" name="s" value="${loc(st.start_at)}">
+ <label>رسالة الترحيب</label><input name="w" value="${esc(st.welcome)}"><label>مناسبة جاية (اسم)</label><input name="en" value="${esc(st.event_name)}">
+ <label>تاريخ المناسبة</label><input type="datetime-local" name="e" value="${loc(st.event_at)}"><button>حفظ</button></form>
+ <div class="card"><button id="bk">⬇️ نسخة احتياطية (JSON)</button> <button class="ghost" id="lo">تسجيل خروج</button><p class="muted">نسيتوا كلمة السر؟ من Supabase: Authentication ← Users ← ⋯ ← Send password recovery.</p></div>`;
+ $('#sf').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),t=x=>x?new Date(x).toISOString():null;
+  const r=await sb.from('settings').update({start_at:t(f.get('s')),welcome:f.get('w'),event_name:f.get('en'),event_at:t(f.get('e'))}).eq('id',1);r.error?onerr(r.error):(toast('اتحفظ ✅'),load())};
+ $('#bk').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({settings:st,items},null,1)]));a.download='backup.json';a.click()};
+ $('#lo').onclick=async()=>{await sb.auth.signOut();location.reload()}}
+boot();
+</script></body></html>
