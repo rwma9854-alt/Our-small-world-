@@ -1,7 +1,7 @@
 <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>عالمنا الصغير</title><meta name="theme-color" content="#2a1740">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Reem+Kufi:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Reem+Kufi:wght@600&family=Aref+Ruqaa:wght@700&family=Baloo+Bhaijaan+2:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#fff5f8;--card:#ffffffb8;--tx:#4a2748;--pk:#f4a6c0;--lv:#c9b6f2;--gd:#d4af6a;--rg:#b76e79}
 @media(prefers-color-scheme:dark){:root{--bg:#1d1030;--card:#ffffff14;--tx:#fdeaf2}}
@@ -25,34 +25,105 @@ nav button{flex:0 0 auto;font-size:13px;padding:8px 12px}nav button.on{outline:2
 .tile b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.tile small{font-size:11px}
 .big{font-size:56px;text-align:center;font-weight:700;font-family:'Reem Kufi'}
 .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.muted{opacity:.7;font-size:13px}
-#toast{position:fixed;top:12px;inset-inline:12px;z-index:9;text-align:center;background:#3b1a3a;color:#fff;border-radius:14px;padding:10px;display:none}
+#toast{position:fixed;top:12px;inset-inline:12px;z-index:300;text-align:center;background:#3b1a3a;color:#fff;border-radius:14px;padding:10px;display:none}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}
 dialog{border:0;border-radius:20px;background:var(--bg);color:var(--tx);width:min(92vw,520px)}
 #jar{font-size:110px;text-align:center;cursor:pointer;user-select:none}#heart{font-size:40px;text-align:center;animation:pop .6s}
-.dead{display:none}
+.dead{display:none!important}
+.moods{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}.mood{font-size:46px;line-height:1.2;padding:16px 6px;border-radius:26px;background:linear-gradient(160deg,#fde4ee,#e3d7fb);box-shadow:0 0 18px #f4a6c077;transition:transform .2s}.mood small{display:block;font:700 15px Tajawal}.mood.on{outline:3px solid var(--gd);transform:scale(1.05)}
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center}
+#env{position:relative;width:min(92vw,420px);perspective:900px}
+#env .body{position:relative;margin:0;background:#f6ead2 repeating-linear-gradient(135deg,#0000 0 10px,#d4af6a14 10px 20px);border:2px solid #b08d57;border-radius:6px 6px 18px 18px;padding:130px 18px 18px;box-shadow:0 14px 40px #5a3a1a55;color:#4a2c17}
+#env .flap{position:absolute;inset:0 0 auto 0;height:112px;background:linear-gradient(#e6d1a6,#d9bf8c);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .9s ease;z-index:3}
+#env .seal{position:absolute;top:84px;left:50%;transform:translateX(-50%);width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:radial-gradient(#d24a4a,#7b1e1e);box-shadow:0 3px 8px #0006;z-index:4;transition:all .5s}
+#env .stamp{position:absolute;top:14px;left:14px;width:44px;height:54px;border:2px dotted #b76e79;display:grid;place-items:center;font-size:22px;transform:rotate(6deg);z-index:2;background:#fffaf0}
+#env h1{background:none;-webkit-text-fill-color:#8e3b46;color:#8e3b46;font-family:'Aref Ruqaa',serif;font-size:27px;text-align:center;margin:0 0 6px}
+#env input{background:#fffaf0cc;border:1px dashed #b08d57;color:#4a2c17}
+#env button{background:linear-gradient(135deg,#b76e79,#8e3b46);color:#fff}
+#env.open .flap{transform:rotateX(180deg)}#env.open .seal{opacity:0;transform:translateX(-50%) scale(2)}
+#env.zoom{transition:transform .5s,opacity .5s;transform:scale(1.35);opacity:0}
+.fh{position:absolute;left:50%;top:35%;font-size:24px;pointer-events:none;z-index:9;animation:fly 1.6s ease-out both}
+@keyframes fly{0%{transform:translate(0,0) scale(.4);opacity:0}15%{opacity:1}100%{transform:translate(var(--x),var(--y)) scale(1.4) rotate(var(--r));opacity:0}}
+#app:not(.dead){animation:pop .6s}
+#auth.wrap{max-width:none;background:radial-gradient(circle at 85% 6%,#ffc86a66,transparent 22%),radial-gradient(2px 2px at 12% 20%,#f5d38a,#0000),radial-gradient(2px 2px at 30% 72%,#f5d38a,#0000),radial-gradient(1.5px 1.5px at 70% 35%,#f5d38a,#0000),radial-gradient(2px 2px at 88% 80%,#f5d38a,#0000),radial-gradient(1.5px 1.5px at 50% 8%,#f5d38a,#0000),radial-gradient(circle at 50% 50%,#33201a,#120a07)}
+#env .body{background:linear-gradient(160deg,#cfa571,#b88a52);border:0;border-radius:4px 4px 10px 10px;padding:190px 20px 22px;box-shadow:0 18px 50px #000a,inset 0 0 40px #6b4a2455;color:#3b2412;overflow:hidden}
+#env .flap{height:150px;background:linear-gradient(#d3aa75,#c29a62);filter:drop-shadow(0 4px 4px #0005)}
+#env .seal{top:116px;width:62px;height:62px;font-size:30px;color:#e8b7c8cc;background:radial-gradient(circle at 35% 30%,#8a3358,#4a1230);border:3px solid #5d1b3d;box-shadow:0 4px 10px #000a,inset 0 0 8px #0008}
+#env .stamp{display:none}#env h1{color:#3b2412;-webkit-text-fill-color:#3b2412}
+#env .muted{color:#3b2412}#err{color:#6b1020!important;font-weight:700}
+#env input{background:#f7ecd5;border:1px dashed #7a5530;color:#3b2412}
+#env button{background:linear-gradient(135deg,#7a2a4a,#4a1230);color:#f5d38a}
+.folds{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.flo{position:absolute;right:6px;bottom:4px;width:84px;height:112px;opacity:.5;pointer-events:none;z-index:0}
+#env form>*:not(svg){position:relative;z-index:1}
+#auth.wrap{background:linear-gradient(160deg,#ffe3ee,#eadffb)}
+#env .body{background:#ffd3e3 radial-gradient(circle,#ffffffaa 3px,#0000 4px) 0 0/22px 22px;border:3px solid #fff;border-radius:6px 6px 28px 28px;box-shadow:0 14px 34px #e0709a55;color:#5a2a4a}
+#env .flap{background:linear-gradient(#ffbcd5,#ffa6c6);filter:drop-shadow(0 4px 4px #c0507a44)}
+#env .seal{font-size:28px;background:#fff;border:3px solid #ff8fb4;box-shadow:0 4px 10px #c0507a55;color:inherit;animation:beat 1.4s ease-in-out infinite}
+@keyframes beat{50%{transform:translateX(-50%) scale(1.13)}}
+#env.open .seal{animation:none}
+#env h1{color:#b03a6a;-webkit-text-fill-color:#b03a6a}
+#env .muted{color:#7a3b66}#err{color:#c0234f!important}
+#env input{background:#fff;border:2px solid #ffc2d8;border-radius:18px;color:#5a2a4a}
+#env button{background:linear-gradient(135deg,#ff9ec1,#c9b6f2);color:#5a2a4a;border-radius:18px;box-shadow:0 4px 12px #e0709a55}
+.folds{display:none}.flo{opacity:1;width:84px;height:56px}
+#auth.wrap{background:radial-gradient(circle at 50% 0%,#5a2a5a,#2a1740 72%),radial-gradient(2px 2px at 12% 20%,#f5d38a,#0000),radial-gradient(2px 2px at 30% 72%,#f5d38a,#0000),radial-gradient(1.5px 1.5px at 72% 30%,#f5d38a,#0000),radial-gradient(2px 2px at 88% 82%,#f5d38a,#0000)}
+#env .body{background:linear-gradient(160deg,#fff3f2,#f8e1e7);border:1px solid #d9b56a;outline:1px solid #e8cf9a;outline-offset:-8px;border-radius:6px 6px 22px 22px;padding:118px 22px 22px;box-shadow:0 18px 44px #0008;color:#5a2a4a}
+#env .flap{height:96px;background:linear-gradient(#f6d5de,#eebfcd);filter:drop-shadow(0 3px 3px #0004)}
+#env .seal{top:70px;width:50px;height:50px;font-size:24px;color:#ffe3ec;background:radial-gradient(circle at 35% 30%,#df7a97,#9b3556);border:2px solid #8a2a4a;box-shadow:0 3px 8px #0007,inset 0 0 6px #0006}
+#env h1{font-size:25px;color:#a8456b;-webkit-text-fill-color:#a8456b}
+#env .muted{color:#7a4a66;font-size:13px}#err{color:#b0163f!important;margin:4px 0 0}
+#env input{background:#fffaf6;border:1px solid #d9b56a;border-radius:12px;padding:9px;margin:3px 0;color:#5a2a4a}
+#env button{background:linear-gradient(135deg,#e6a9a6,#b76e79);color:#fff;border-radius:12px;margin-top:6px;box-shadow:0 4px 12px #b76e7966}
+.flo{display:none}
+#gate{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:20px;text-align:center;font-family:'Baloo Bhaijaan 2',Tajawal,sans-serif;background:linear-gradient(170deg,#fff 0%,#ffe3e8 35%,#ff7a90 70%,#c1123a 100%);transition:opacity .6s}
+#gate.fade{opacity:0}#gate.yes{background:radial-gradient(circle,#ff4d6d,#c1123a)}
+.gh{position:absolute;inset:0;overflow:hidden;pointer-events:none}.gh i{position:absolute;bottom:-30px;animation:up linear infinite;opacity:.85}
+#gate h1{position:relative;background:none;-webkit-text-fill-color:#c1123a;color:#c1123a;font-family:inherit;font-size:44px;margin:0;text-shadow:0 3px 12px #fff}
+#gb{position:relative;display:flex;gap:22px;justify-content:center}
+#gate button{font:inherit;font-size:26px;padding:8px 36px;border-radius:30px;border:0;cursor:pointer;width:auto}
+#yes{background:#c1123a;color:#fff;box-shadow:0 6px 18px #c1123a88}
+#no{background:#fff;color:#c1123a;border:2px solid #c1123a!important;transition:left .25s,top .25s;z-index:60}
+#mt{display:none;position:relative;font-size:68px;color:#fff;text-shadow:0 4px 22px #7a0a24;animation:beat2 1s ease-in-out infinite}
+@keyframes beat2{50%{transform:scale(1.1)}}
+#mus{position:fixed;bottom:76px;left:12px;width:48px;height:48px;border-radius:50%;padding:0;font-size:22px;z-index:20;box-shadow:0 4px 14px #b76e7966}
 </style></head><body>
 <div class="stars" id="stars"></div><div id="toast"></div>
-<div id="auth" class="wrap"><h1 style="text-align:center;font-size:34px">أهلًا بيكم في عالمنا الصغير ✨</h1>
-<form id="login" class="card"><p class="muted">دخول خاص بينا إحنا الاتنين 💗</p>
-<input id="em" type="email" placeholder="الإيميل" autocomplete="username" required>
-<input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password" required>
+<div id="gate"><div class="gh"></div><h1 id="gq" dir="ltr">Do you love me? 💗</h1><div id="gb"><button id="yes">Yes 💗</button> <button id="no">No</button></div><div id="mt">me too 💗</div></div>
+<div id="auth" class="wrap dead"><div id="env"><div class="flap"><svg viewBox="0 0 420 96" width="100%" fill="#c9a25a" stroke="none"><text x="150" y="30" font-size="17">♡</text><text x="262" y="30" font-size="17">♡</text><text x="203" y="26" font-size="14">✦</text><text x="110" y="18" font-size="9">✦</text><text x="304" y="16" font-size="9">✦</text><text x="60" y="12" font-size="7">✦</text><text x="352" y="10" font-size="7">✦</text></svg></div><div class="seal">♥</div>
+<form id="login" class="body" novalidate><svg class="folds" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100L50 30L100 100" fill="none" stroke="#6b4a24" stroke-opacity=".35" vector-effect="non-scaling-stroke"/></svg><svg class="flo" viewBox="0 0 90 60"><text x="8" y="46" font-size="32" fill="#ff9ec1">♥</text><text x="42" y="30" font-size="20" fill="#c9b6f2">♥</text><text x="64" y="54" font-size="16" fill="#ffd27a">★</text></svg><h1>أهلًا بيكم في عالمنا الصغير ✨</h1><p class="muted" style="text-align:center">جواب خاص بينا إحنا الاتنين 💗</p>
+<input id="em" type="email" placeholder="الإيميل" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email" required>
+<input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" required>
+<button type="button" id="eye" style="background:none;color:#7a3b66;box-shadow:none;padding:2px 6px;font-size:13px;margin:0">👁️ إظهار كلمة السر</button>
 <input id="who" placeholder="اسمك (علشان نعرف مين كتب)" required>
-<button>ادخل 💫</button><p id="err" class="muted"></p></form></div>
-<div id="app" class="wrap dead"><div id="view"></div>
+<button style="width:100%">افتحي الجواب 💫</button><p id="err" class="muted"></p><p class="muted" style="text-align:center;font-size:11px;margin:0">v15</p></form></div></div>
+<div id="app" class="wrap dead"><div id="view"></div><button id="mus" aria-label="الأغنية">🔇</button>
 <nav id="nav"></nav></div>
 <dialog id="dlg"><form id="f" method="dialog"></form></dialog>
+<script>
+(function(){function show(m){var d=document.getElementById('errbar');if(!d){d=document.createElement('div');d.id='errbar';d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:999;background:#b0163f;color:#fff;padding:10px;font:13px sans-serif;direction:ltr;text-align:left';document.body.appendChild(d)}d.textContent='Error (v15): '+m}
+addEventListener('error',function(e){show(e.message||'script error')});
+addEventListener('unhandledrejection',function(e){show((e.reason&&e.reason.message)||String(e.reason))})})();
+</script>
 <script type="module">
-import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-import {CFG} from './config.js';
+let createClient;
+for(const u of ['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm','https://esm.sh/@supabase/supabase-js@2','https://cdn.skypack.dev/@supabase/supabase-js@2','https://unpkg.com/@supabase/supabase-js@2/dist/module/index.js?module']){
+ try{({createClient}=await import(u));break}catch(e){}}
+if(!createClient){document.getElementById('err').textContent='تعذر تحميل مكتبة الاتصال. جرّبي شبكة تانية (واي فاي أو بيانات) وحدّثي الصفحة.';throw new Error('no supabase lib')}
+const CFG={url:"https://dqorjtqisquvixlmmenm.supabase.co",key:"sb_publishable_3eFH-ksbtAXJ8by30anZvQ_zd20fvoS"};
 const $=s=>document.querySelector(s),sb=createClient(CFG.url,CFG.key);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const SECS={timeline:{n:'🕰️ خط الزمن',cats:[],date:1,link:1,ph:'مثال: أول مرة اتكلمنا'},
 letters:{n:'💌 رسائل',cats:['رسائل حب','رسائل الصباح','رسائل قبل النوم','رسائل وقت الزعل','رسائل وقت الاشتياق','رسائل التشجيع','رسائل للمناسبات','رسائل للمستقبل','لما تكون زعلان'],letter:1},
 jar:{n:'🫙 البرطمان',cats:['حب','تشجيع','ضحك','اشتياق'],jar:1},
-photos:{n:'📸 الصور',cats:['أجمل ذكرياتنا','صوري المفضلة ليك','صورك المفضلة ليا','صورنا سوا','صور الخطوبة','صور الفرح والمستقبل','ألبوم مفاجآت'],photo:1,date:1},
+photos:{n:'📸 صور وفيديوهات',cats:['أجمل ذكرياتنا','صوري المفضلة ليك','صورك المفضلة ليا','صورنا سوا','صور الخطوبة','صور الفرح والمستقبل','ألبوم مفاجآت'],photo:1,date:1},
 music:{n:'🎵 الموسيقى',cats:['أغانينا','أغاني بتفكرني بيك','أغاني للمناسبات'],link:1},
 plans:{n:'💍 مستقبلنا',cats:['الخطوبة','الفرح'],check:1,date:1,budget:1},
 dreams:{n:'🌠 أحلامنا',cats:[],check:1}};
+SECS.moods={n:'🫶 مشاعرنا',cats:['😢 زعلان','😠 متضايق','🥺 وحشتني','😴 تعبان','😰 قلقان','🥰 مبسوط','💪 محتاج تشجيع','🌙 مش قادر أنام'],mood:1,ph:'عنوان الرسالة'};
+SECS.upset={n:'💔 مضايقاني منك',cats:[],check:1,nobar:1,ph:'اللي مضايقني...'};
+SECS.qa={n:'❓ أسئلة الشهر',cats:[]};
+SECS.voice={n:'🎙️ ريكورداتنا',cats:[]};
 const TABS=['home',...Object.keys(SECS),'settings'];
 let st={},items=[],tab='home',cat='',q='',me=localStorage.me||'',timer,urls={};
 const toast=(m,ok)=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._);t._=setTimeout(()=>t.style.display='none',3500)};
@@ -60,40 +131,41 @@ const onerr=e=>toast(navigator.onLine?'حصلت مشكلة: '+(e.message||e):'م
 addEventListener('offline',()=>toast('انت أوفلاين — مش هيتحفظ حاجة لحد ما النت يرجع'));
 $('#stars').innerHTML=Array.from({length:14},(_,i)=>`<i style="left:${Math.random()*100}%;font-size:${12+Math.random()*18}px;animation-duration:${14+Math.random()*16}s;animation-delay:-${Math.random()*20}s">${['💗','✨','⭐','💜'][i%4]}</i>`).join('');
 $('#who').value=me;
-$('#login').onsubmit=async e=>{e.preventDefault();me=$('#who').value.trim();localStorage.me=me;
- const {error}=await sb.auth.signInWithPassword({email:$('#em').value,password:$('#pw').value});
- if(error)$('#err').textContent='الإيميل أو كلمة السر غلط';else boot()};
-async function boot(){const {data}=await sb.auth.getSession();if(!data.session)return;
- if(!me){me=prompt('اسمك؟')||'أنا';localStorage.me=me}
- $('#auth').classList.add('dead');$('#app').classList.remove('dead');
- $('#nav').innerHTML=TABS.map(t=>`<button data-t="${t}">${t=='home'?'🏠 الرئيسية':t=='settings'?'⚙️ إعدادات':SECS[t].n}</button>`).join('');
- $('#nav').onclick=e=>{const b=e.target.closest('button');if(b){tab=b.dataset.t;cat='';q='';render()}};
- await load();sb.channel('x').on('postgres_changes',{event:'*',schema:'public'},()=>load()).subscribe()}
-async function load(){try{const [s,i]=await Promise.all([sb.from('settings').select().eq('id',1).single(),sb.from('items').select().order('created_at',{ascending:false})]);
- if(s.error)throw s.error;if(i.error)throw i.error;st=s.data;items=i.data;render()}catch(e){onerr(e)}}
-const pad=n=>String(n).padStart(2,'0');
-function ym(a,b){let m=(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth(),t=new Date(a);t.setMonth(a.getMonth()+m);if(t>b){m--;t=new Date(a);t.setMonth(a.getMonth()+m)}return[m,Math.floor((b-t)/864e5)]}
-function tick(){const el=$('#cnt');if(!el||!st.start_at)return;const a=new Date(st.start_at),n=new Date(),d=n-a,[m,dd]=ym(a,n);
- const nx=new Date(a);nx.setFullYear(n.getFullYear());if(nx<=n)nx.setFullYear(n.getFullYear()+1);const r=nx-n;
- el.innerHTML=`<div class="big">${Math.floor(d/864e5)}</div><p style="text-align:center">يوم سوا 💗</p><div class="tiles">
- ${[[m,'شهر'],[dd,'يوم'],[pad(Math.floor(d/36e5)%24),'ساعة'],[pad(Math.floor(d/6e4)%60),'دقيقة']].map(([v,l])=>`<div class="tile"><b>${v}</b><small>${l}</small></div>`).join('')}</div>
- <p style="text-align:center">${pad(Math.floor(d/1e3)%60)} ثانية</p><p class="muted" style="text-align:center">بدأنا: ${a.toLocaleString('ar-EG',{dateStyle:'full',timeStyle:'short'})}</p>
- <h2 style="text-align:center">الذكرى الجاية بعد ${Math.floor(r/864e5)} يوم و${Math.floor(r/36e5)%24} ساعة 🎉</h2>`}
-function render(){clearInterval(timer);document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab));
- const v=$('#view');
- if(tab=='home'){v.innerHTML=`<h1>${esc(st.welcome)}</h1>${st.start_at?'<div class="card" id="cnt"></div>':'<div class="card"><h2>أول مرة؟ ✨</h2><p>اختاروا تاريخ ووقت بداية علاقتكم من ⚙️ الإعدادات.</p></div>'}
- ${st.event_at?`<div class="card"><h2>${esc(st.event_name||'يومنا المنتظر')}</h2><p>باقي ${Math.max(0,Math.ceil((new Date(st.event_at)-new Date())/864e5))} يوم</p></div>`:''}
- <div class="card"><button id="star">⭐ اضغط على نجمة</button> <span id="sec"></span></div>`;
-  tick();timer=setInterval(tick,1000);$('#star').onclick=()=>{const l=items.filter(i=>i.kind=='letters'&&i.data.surprise&&i.created_by!=me);$('#sec').textContent=l.length?'💌 فيه رسالة مفاجأة مستنياك في الرسائل!':'لسه مفيش مفاجآت مخبية ✨'}}
- else if(tab=='settings')settingsView();else listView()}
-function listView(){const S=SECS[tab],v=$('#view');let L=items.filter(i=>i.kind==tab&&(!cat||i.category==cat)&&(!q||(i.title+i.body).includes(q)));
- if(S.date&&!S.photo)L.sort((a,b)=>new Date(a.date||a.created_at)-new Date(b.date||b.created_at));
- v.innerHTML=`<h1>${S.n}</h1><div class="row"><input id="q" placeholder="🔍 بحث" value="${esc(q)}" style="flex:1">${S.cats.length?`<select id="cat" style="width:auto"><option value="">الكل</option>${S.cats.map(c=>`<option ${c==cat?'selected':''}>${c}</option>`).join('')}</select>`:''}<button id="add">＋ إضافة</button></div>
- ${S.check?`<p class="muted">التقدم: ${L.filter(i=>i.done).length}/${L.length}</p><progress style="width:100%" max="${L.length||1}" value="${L.filter(i=>i.done).length}"></progress>`:''}
- ${S.jar?`<div class="card"><div id="jar">🫙</div><div id="out" style="text-align:center"></div><p class="muted" style="text-align:center">${L.length} رسالة في البرطمان</p></div>`:''}
- ${L.length?'':'<div class="card muted">لسه مفيش حاجة هنا… أضيفوا أول حاجة بإيديكم 💗</div>'}
- <div class="${S.photo?'grid':''}">${L.map(card).join('')}</div>`;
- $('#q').onchange=e=>{q=e.target.value;listView()};if($('#cat'))$('#cat').onchange=e=>{cat=e.target.value;listView()};
+$('#eye').onclick=()=>{const p=$('#pw'),h=p.type=='password';p.type=h?'text':'password';$('#eye').textContent=h?'🙈 إخفاء كلمة السر':'👁️ إظهار كلمة السر'};
+$('#login').onsubmit=async e=>{e.preventDefault();const err=$('#err'),btn=e.target.querySelector('button'),E=$('#em'),P=$('#pw'),W=$('#who'),em=E.value.trim(),pw=P.value;me=W.value.trim();
+ [E,P,W].forEach(x=>x.style.borderColor='');
+ const bad=(f,m)=>{f.style.borderColor='#c0234f';f.focus();err.textContent='❌ '+m};
+ if(!em)return bad(E,'اكتبي الإيميل');
+ if(!/^\S+@\S+\.\S+$/.test(em))return bad(E,'الإيميل مكتوب غلط (لازم فيه @ ونقطة ومن غير مسافات)');
+ if(!pw)return bad(P,'اكتبي كلمة السر');
+ if(!me)return bad(W,'اكتبي اسمك');
+ localStorage.me=me;btn.disabled=true;btn.textContent='جاري الفتح...';err.textContent='';
+ try{const {error}=await Promise.race([sb.auth.signInWithPassword({email:em,password:pw}),new Promise((_,j)=>setTimeout(()=>j(new Error('الاتصال بطيء أو مقفول — جربي شبكة تانية')),15000))]);
+  if(error){const m=(error.message||'').toLowerCase();
+   if(m.includes('invalid login')){E.style.borderColor=P.style.borderColor='#c0234f';err.textContent='❌ الإيميل أو كلمة السر غلط — Supabase مش بيقول أنهي واحد فيهم لأسباب أمان. راجعي الإيميل حرف بحرف وكلمة السر.'}
+   else if(m.includes('not confirmed'))err.textContent='❌ الإيميل ده لسه مش متأكد في Supabase (علّمي Auto Confirm User)';
+   else if(m.includes('rate')||error.status==429)err.textContent='❌ محاولات كتير ورا بعض، استني دقيقة وجربي تاني';
+   else if(m.includes('fetch')||m.includes('network'))err.textContent='❌ مفيش اتصال بـ Supabase — جربي شبكة تانية';
+   else err.textContent='❌ '+error.message;err.textContent+=' ['+(error.status||'')+' '+error.message+']'}
+  else openEnv()}catch(x){err.textContent='❌ '+x.message}
+ btn.disabled=false;btn.textContent='افتحي الجواب 💫'};
+$('.gh').innerHTML=Array.from({length:22},(_,i)=>`<i style="left:${Math.random()*100}%;font-size:${14+Math.random()*22}px;animation-duration:${9+Math.random()*10}s;animation-delay:-${Math.random()*14}s">${['❤️','🤍','💗','❤️'][i%4]}</i>`).join('');
+{const no=$('#no'),yes=$('#yes');
+function dodge(e){e.preventDefault();const w=no.offsetWidth,h=no.offsetHeight,r=yes.getBoundingClientRect();let x,t,k=0;
+ do{x=8+Math.random()*(innerWidth-w-16);t=8+Math.random()*(innerHeight-h-16);k++}while(k<25&&Math.abs(x+w/2-(r.left+r.width/2))<(w+r.width)/2+20&&Math.abs(t+h/2-(r.top+r.height/2))<h+30);
+ no.style.position='fixed';no.style.left=x+'px';no.style.top=t+'px'}
+['pointerenter','touchstart','pointerdown','click'].forEach(ev=>no.addEventListener(ev,dodge,{passive:false}));
+yes.onclick=()=>{const g=$('#gate');g.classList.add('yes');$('#gb').style.display='none';$('#gq').style.display='none';$('#mt').style.display='block';
+ if(!matchMedia('(prefers-reduced-motion:reduce)').matches)for(let i=0;i<26;i++){const h=document.createElement('span');h.className='fh';h.textContent=['❤️','💗','🤍','💕'][i%4];h.style.cssText=`--x:${Math.random()*460-230}px;--y:${-260-Math.random()*300}px;--r:${Math.random()*80-40}deg;animation-delay:${Math.random()*.6}s`;g.appendChild(h)}
+ setTimeout(()=>g.classList.add('fade'),1800);setTimeout(()=>{g.classList.add('dead');$('#auth').classList.remove('dead')},2400)}}
+const aud=new Audio(),mus=$('#mus');aud.loop=true;aud.volume=.6;let musPath='';
+function musUI(){mus.textContent=aud.paused?'🔇':'🎵';mus.setAttribute('aria-label',aud.paused?'تشغيل الأغنية':'إيقاف الأغنية')}
+aud.onplay=aud.onpause=musUI;
+mus.onclick=async()=>{if(!musPath)return toast('ضيفي أغنية من ⚙️ الإعدادات الأول 🎵');if(aud.paused){localStorage.musicOff='';try{await aud.play()}catch(e){onerr(e)}}else{aud.pause();localStorage.musicOff='1'}};
+async function musSync(){const it=items.find(i=>i.kind=='bgsong'),p=it?.data.path||'';if(p==musPath)return;musPath=p;
+ if(!p){aud.pause();aud.removeAttribute('src');musUI();return}
+ const r=await sb.storage.from('photos').createSignedUrl(p,21600);if(r.error)throw r.error;aud.src=r.data.signedUrl;
+ if(!localStorage.musicOff)('#q').onchange=e=>{q=e.target.value;listView()};if($('#cat'))$('#cat').onchange=e=>{cat=e.target.value;listView()};
  $('#add').onclick=()=>edit();
  if(S.jar)$('#jar').onclick=()=>{if(!L.length)return toast('ضيفوا رسائل الأول 💌');const m=L[Math.random()*L.length|0];
   $('#out').innerHTML=`<div id="heart">💖</div><p>${esc(m.body||m.title)}</p><button data-fav="${m.id}">${m.fav?'💔 شيل من المفضلة':'⭐ حفظ في المفضلة'}</button> <button class="ghost" id="more">رسالة تانية</button>`;$('#more').onclick=()=>$('#jar').click()};
