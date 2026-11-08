@@ -96,6 +96,91 @@ dialog{border:0;border-radius:20px;background:var(--bg);color:var(--tx);width:mi
 <input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" required>
 <button type="button" id="eye" style="background:none;color:#7a3b66;box-shadow:none;padding:2px 6px;font-size:13px;margin:0">👁️ إظهار كلمة السر</button>
 <input id="who" placeholder="اسمك (علشان نعرف مين كتب)" required>
+<button style="width:100%">افتحي الجواب 💫</button><p id="err" class="muted"></p><p class="muted" style="text-align:center;font-size:11px;margin:0">v16</p></form></div></div>
+<div id="app" class="wrap dead"><div id="view"></div><button id="mus" aria-label="الأغنية">🔇</button>
+<nav id="nav"></nav></div>
+<dialog id="dlg"><form id="f" method="dialog"></form></dialog>
+<script>
+(function(){function show(m){var d=document.getElementById('errbar');if(!d){d=document.createElement('div');d.id='errbar';d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:999;background:#b0163f;color:#fff;padding:10px;font:13px sans-serif;direction:ltr;text-align:left';document.body.appendChild(d)}d.textContent='Error (v16): '+m}
+addEventListener('error',function(e){show(e.message||'script error')});
+addEventListener('unhandledrejection',function(e){show((e.reason&&e.reason.message)||String(e.reason))})})();
+</script>
+<script type="module">
+let createClient;
+for(const u of ['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm','https://esm.sh/@supabase/supabase-js@2','https://cdn.skypack.dev/@supabase/supabase-js@2','https://unpkg.com/@supabase/supabase-js@2/dist/module/index.js?module']){
+ try{({createClient}=await import(u));break}catch(e){}}
+if(!createClient){document.getElementById('err').textContent='تعذر تحميل مكتبة الاتصال. جرّبي شبكة تانية (واي فاي أو بيانات) وحدّثي الصفحة.';throw new Error('no supabase lib')}
+const CFG={url:"https://dqorjtqisquvixlmmenm.supabase.co",key:"sb_publishable_3eFH-ksbtAXJ8by30anZvQ_zd20fvoS"};
+const $=s=>document.querySelector(s),sb=createClient(CFG.url,CFG.key);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SECS={timeline:{n:'🕰️ خط الزمن',cats:[],date:1,link:1,ph:'مثال: أول مرة اتكلمنا'},
+letters:{n:'💌 رسائل',cats:['رسائل حب','رسائل الصباح','رسائل قبل النوم','رسائل وقت الزعل','رسائل وقت الاشتياق','رسائل التشجيع','رسائل للمناسبات','رسائل للمستقبل','لما تكون زعلان'],letter:1},
+jar:{n:'🫙 البرطمان',cats:['حب','تشجيع','ضحك','اشتياق'],jar:1},
+photos:{n:'📸 صور وفيديوهات',cats:['أجمل ذكرياتنا','صوري المفضلة ليك','صورك المفضلة ليا','صورنا سوا','صور الخطوبة','صور الفرح والمستقبل','ألبوم مفاجآت'],photo:1,date:1},
+music:{n:'🎵 الموسيقى',cats:['أغانينا','أغاني بتفكرني بيك','أغاني للمناسبات'],link:1},
+plans:{n:'💍 مستقبلنا',cats:['الخطوبة','الفرح'],check:1,date:1,budget:1},
+dreams:{n:'🌠 أحلامنا',cats:[],check:1}};
+SECS.moods={n:'🫶 مشاعرنا',cats:['😢 زعلان','😠 متضايق','🥺 وحشتني','😴 تعبان','😰 قلقان','🥰 مبسوط','💪 محتاج تشجيع','🌙 مش قادر أنام'],mood:1,ph:'عنوان الرسالة'};
+SECS.upset={n:'💔 مضايقاني منك',cats:[],check:1,nobar:1,ph:'اللي مضايقني...'};
+SECS.qa={n:'❓ أسئلة الشهر',cats:[]};
+SECS.voice={n:'🎙️ ريكورداتنا',cats:[]};
+const TABS=['home',...Object.keys(SECS),'settings'];
+let st={},items=[],tab='home',cat='',q='',me=localStorage.me||'',timer,urls={};
+const toast=(m,ok)=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._);t._=setTimeout(()=>t.style.display='none',3500)};
+const onerr=e=>toast(navigator.onLine?'حصلت مشكلة: '+(e.message||e):'مفيش إنترنت — التغيير ماتحفظش ⚠️');
+addEventListener('offline',()=>toast('انت أوفلاين — مش هيتحفظ حاجة لحد ما النت يرجع'));
+$('#stars').innerHTML=Array.from({length:14},(_,i)=>`<i style="left:${Math.random()*100}%;font-size:${12+Math.random()*18}px;animation-duration:${14+Math.random()*16}s;animation-delay:-${Math.random()*20}s">${['💗','✨','⭐','💜'][i%4]}</i>`).join('');
+$('#who').value=me;
+$('#eye').onclick=()=>{const p=$('#pw'),h=p.type=='password';p.type=h?'text':'password';$('#eye').textContent=h?'🙈 إخفاء كلمة السر':'👁️ إظهار كلمة السر'};
+$('#login').onsubmit=async e=>{e.preventDefault();const err=$('#err'),btn=e.target.querySelector('button'),E=$('#em'),P=$('#pw'),W=$('#who'),em=E.value.trim(),pw=P.value;me=W.value.trim();
+ [E,P,W].forEach(x=>x.style.borderColor='');
+ const bad=(f,m)=>{f.style.borderColor='#c0234f';f.focus();err.textContent='❌ '+m};
+ if(!em)return bad(E,'اكتبي الإيميل');
+ if(!/^\S+@\S+\.\S+$/.test(em))return bad(E,'الإيميل مكتوب غلط (لازم فيه @ ونقطة ومن غير مسافات)');
+ if(!pw)return bad(P,'اكتبي كلمة السر');
+ if(!me)return bad(W,'اكتبي اسمك');
+ localStorage.me=me;btn.disabled=true;btn.textContent='جاري الفتح...';err.textContent='';
+ try{const {error}=await Promise.race([sb.auth.signInWithPassword({email:em,password:pw}),new Promise((_,j)=>setTimeout(()=>j(new Error('الاتصال بطيء أو مقفول — جربي شبكة تانية')),15000))]);
+  if(error){const m=(error.message||'').toLowerCase();
+   if(m.includes('invalid login')){E.style.borderColor=P.style.borderColor='#c0234f';err.textContent='❌ الإيميل أو كلمة السر غلط — Supabase مش بيقول أنهي واحد فيهم لأسباب أمان. راجعي الإيميل حرف بحرف وكلمة السر.'}
+   else if(m.includes('not confirmed'))err.textContent='❌ الإيميل ده لسه مش متأكد في Supabase (علّمي Auto Confirm User)';
+   else if(m.includes('rate')||error.status==429)err.textContent='❌ محاولات كتير ورا بعض، استني دقيقة وجربي تاني';
+   else if(m.includes('fetch')||m.includes('network'))err.textContent='❌ مفيش اتصال بـ Supabase — جربي شبكة تانية';
+   else err.textContent='❌ '+error.message;err.textContent+=' ['+(error.status||'')+' '+error.message+']'}
+  else openEnv()}catch(x){err.textContent='❌ '+x.message}
+ btn.disabled=false;btn.textContent='افتحي الجواب 💫'};
+$('.gh').innerHTML=Array.from({length:22},(_,i)=>`<i style="left:${Math.random()*100}%;font-size:${14+Math.random()*22}px;animation-duration:${9+Math.random()*10}s;animation-delay:-${Math.random()*14}s">${['❤️','🤍','💗','❤️'][i%4]}</i>`).join('');
+{const no=$('#no'),yes=$('#yes');
+function dodge(e){e.preventDefault();const w=no.offsetWidth,h=no.offsetHeight,r=yes.getBoundingClientRect();let x,t,k=0;
+ do{x=8+Math.random()*(innerWidth-w-16);t=8+Math.random()*(innerHeight-h-16);k++}while(k<25&&Math.abs(x+w/2-(r.left+r.width/2))<(w+r.width)/2+20&&Math.abs(t+h/2-(r.top+r.height/2))<h+30);
+ no.style.position='fixed';no.style.left=x+'px';no.style.top=t+'px'}
+['pointerenter','touchstart','pointerdown','click'].forEach(ev=>no.addEventListener(ev,dodge,{passive:false}));
+yes.onclick=()=>{const g=$('#gate');g.classList.add('yes');$('#gb').style.display='none';$('#gq').style.display='none';$('#mt').style.display='block';
+ if(!matchMedia('(prefers-reduced-motion:reduce)').matches)for(let i=0;i<26;i++){const h=document.createElement('span');h.className='fh';h.textContent=['❤️','💗','🤍','💕'][i%4];h.style.cssText=`--x:${Math.random()*460-230}px;--y:${-260-Math.random()*300}px;--r:${Math.random()*80-40}deg;animation-delay:${Math.random()*.6}s`;g.appendChild(h)}
+ setTimeout(()=>g.classList.add('fade'),1800);setTimeout(()=>{g.classList.add('dead');$('#auth').classList.remove('dead')},2400)}}
+const aud=new Audio(),mus=$('#mus');aud.loop=true;aud.volume=.6;let musPath='';
+function musUI(){mus.textContent=aud.paused?'🔇':'🎵';mus.setAttribute('aria-label',aud.paused?'تشغيل الأغنية':'إيقاف الأغنية')}
+aud.onplay=aud.onpause=musUI;
+mus.onclick=async()=>{if(!musPath)return toast('ضيفي أغنية من ⚙️ الإعدادات الأول 🎵');if(aud.paused){localStorage.musicOff='';try{await aud.play()}catch(e){onerr(e)}}else{aud.pause();localStorage.musicOff='1'}};
+async function musSync(){const it=items.find(i=>i.kind=='bgsong'),p=it?.data.path||'';if(p==musPath)return;musPath=p;
+ if(!p){aud.pause();aud.removeAttribute('src');musUI();return}
+ const r=await sb.storage.from('photos').createSignedUrl(p,21600);if(r.error)throw r.error;aud.src=r.data.signedUrl;
+ if(!localStorage.musicOff)stify-content:center}
+#gate button{font:inherit;font-size:26px;padding:8px 36px;border-radius:30px;border:0;cursor:pointer;width:auto}
+#yes{background:#c1123a;color:#fff;box-shadow:0 6px 18px #c1123a88}
+#no{background:#fff;color:#c1123a;border:2px solid #c1123a!important;transition:left .25s,top .25s;z-index:60}
+#mt{display:none;position:relative;font-size:68px;color:#fff;text-shadow:0 4px 22px #7a0a24;animation:beat2 1s ease-in-out infinite}
+@keyframes beat2{50%{transform:scale(1.1)}}
+#mus{position:fixed;bottom:76px;left:12px;width:48px;height:48px;border-radius:50%;padding:0;font-size:22px;z-index:20;box-shadow:0 4px 14px #b76e7966}
+</style></head><body>
+<div class="stars" id="stars"></div><div id="toast"></div>
+<div id="gate"><div class="gh"></div><h1 id="gq" dir="ltr">Do you love me? 💗</h1><div id="gb"><button id="yes">Yes 💗</button> <button id="no">No</button></div><div id="mt">me too 💗</div></div>
+<div id="auth" class="wrap dead"><div id="env"><div class="flap"><svg viewBox="0 0 420 96" width="100%" fill="#c9a25a" stroke="none"><text x="150" y="30" font-size="17">♡</text><text x="262" y="30" font-size="17">♡</text><text x="203" y="26" font-size="14">✦</text><text x="110" y="18" font-size="9">✦</text><text x="304" y="16" font-size="9">✦</text><text x="60" y="12" font-size="7">✦</text><text x="352" y="10" font-size="7">✦</text></svg></div><div class="seal">♥</div>
+<form id="login" class="body" novalidate><svg class="folds" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100L50 30L100 100" fill="none" stroke="#6b4a24" stroke-opacity=".35" vector-effect="non-scaling-stroke"/></svg><svg class="flo" viewBox="0 0 90 60"><text x="8" y="46" font-size="32" fill="#ff9ec1">♥</text><text x="42" y="30" font-size="20" fill="#c9b6f2">♥</text><text x="64" y="54" font-size="16" fill="#ffd27a">★</text></svg><h1>أهلًا بيكم في عالمنا الصغير ✨</h1><p class="muted" style="text-align:center">جواب خاص بينا إحنا الاتنين 💗</p>
+<input id="em" type="email" placeholder="الإيميل" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email" required>
+<input id="pw" type="password" placeholder="كلمة السر" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" required>
+<button type="button" id="eye" style="background:none;color:#7a3b66;box-shadow:none;padding:2px 6px;font-size:13px;margin:0">👁️ إظهار كلمة السر</button>
+<input id="who" placeholder="اسمك (علشان نعرف مين كتب)" required>
 <button style="width:100%">افتحي الجواب 💫</button><p id="err" class="muted"></p><p class="muted" style="text-align:center;font-size:11px;margin:0">v15</p></form></div></div>
 <div id="app" class="wrap dead"><div id="view"></div><button id="mus" aria-label="الأغنية">🔇</button>
 <nav id="nav"></nav></div>
